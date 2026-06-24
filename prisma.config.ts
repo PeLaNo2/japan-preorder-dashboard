@@ -1,9 +1,9 @@
-import { defineConfig } from "@prisma/config"
-
-const databaseUrl = process.env.DATABASE_URL || ""
+import "dotenv/config"
+import { defineConfig } from "prisma/config"
 
 export default defineConfig({
-  db: {
-    url: databaseUrl,
+  schema: "prisma/schema.prisma",
+  datasource: {
+    url: process.env.DATABASE_URL || "",
   },
 })
