@@ -1,9 +1,17 @@
 import { auth, signIn } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { ShoppingBag } from "lucide-react"
+import { ShoppingBag, AlertCircle } from "lucide-react"
 
 export default async function SignInPage() {
-  const session = await auth()
+  let session = null
+  let configError = false
+
+  try {
+    session = await auth()
+  } catch {
+    configError = true
+  }
+
   if (session) redirect("/dashboard")
 
   return (
@@ -20,6 +28,26 @@ export default async function SignInPage() {
         </div>
 
         <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+          {configError ? (
+            <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+                <div>
+                  <p className="text-sm font-medium text-amber-800">
+                    Google OAuth not configured
+                  </p>
+                  <p className="mt-1 text-xs text-amber-700">
+                    Add <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono">AUTH_GOOGLE_ID</code>,{" "}
+                    <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono">AUTH_GOOGLE_SECRET</code>,{" "}
+                    <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono">AUTH_SECRET</code>, and{" "}
+                    <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono">ALLOWED_EMAILS</code>{" "}
+                    in your Vercel dashboard environment variables.
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
           <h2 className="mb-2 text-xl font-semibold text-gray-900">Welcome back</h2>
           <p className="mb-8 text-sm text-gray-500">
             Sign in with your Google account to continue
@@ -57,9 +85,11 @@ export default async function SignInPage() {
           </form>
         </div>
 
-        <p className="mt-6 text-xs text-gray-400">
-          Only whitelisted emails can access this dashboard
-        </p>
+        {!configError && (
+          <p className="mt-6 text-xs text-gray-400">
+            Only whitelisted emails can access this dashboard
+          </p>
+        )}
       </div>
     </div>
   )
