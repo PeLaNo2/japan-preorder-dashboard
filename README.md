@@ -1,4 +1,4 @@
-# ZenPreOrder — Japan Pre-Order Business Dashboard
+# 3A Dashboard — Japan Pre-Order Business Dashboard
 
 **All-in-one business operating system for your Japan pre-order company.** Track sales, costs, and profits in JPY and THB with live exchange rates. Built for you and your co-founders to run the business from anywhere — phone or laptop.
 

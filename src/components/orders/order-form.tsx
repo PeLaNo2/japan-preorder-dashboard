@@ -72,18 +72,17 @@ export function OrderForm() {
   const totals = items.reduce(
     (acc, item) => {
       const cost = Number(item.product.jpyCost) * item.quantity
-      const price = Number(item.product.jpyPrice) * item.quantity
+      const price = Number(item.product.thbPrice) * item.quantity
       return {
         jpyCost: acc.jpyCost + cost,
-        jpyPrice: acc.jpyPrice + price,
-        jpyProfit: acc.jpyProfit + (price - cost),
+        thbPrice: acc.thbPrice + price,
       }
     },
-    { jpyCost: 0, jpyPrice: 0, jpyProfit: 0 }
+    { jpyCost: 0, thbPrice: 0 }
   )
 
-  // We don't have the exchange rate client-side, so show JPY only and let the server calculate THB
-  // The server will return the THB values after creation
+  // We don't have the exchange rate client-side, so show THB only and let the server calculate JPY/THB totals
+  // The server will return the full values after creation
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -228,7 +227,7 @@ export function OrderForm() {
                       <span className="font-medium text-gray-900">{p.name}</span>
                       <span className="ml-2 text-gray-400">{p.sku}</span>
                       <span className="ml-auto float-right font-medium text-gray-700">
-                        {formatJpy(Number(p.jpyPrice))}
+                        {formatThb(Number(p.thbPrice))}
                       </span>
                     </button>
                   ))
@@ -240,7 +239,7 @@ export function OrderForm() {
               <div className="flex items-end gap-3 rounded-xl bg-indigo-50 p-4">
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-900">{selectedProduct.name}</p>
-                  <p className="text-xs text-gray-500">{selectedProduct.sku} — {formatJpy(Number(selectedProduct.jpyPrice))} each</p>
+                  <p className="text-xs text-gray-500">{selectedProduct.sku} — {formatThb(Number(selectedProduct.thbPrice))} each</p>
                 </div>
                 <div className="w-24">
                   <label className="mb-1 block text-xs font-medium text-gray-500">Qty</label>
@@ -280,8 +279,7 @@ export function OrderForm() {
           <div className="mt-4 space-y-2">
             {items.map((item) => {
               const lineCost = Number(item.product.jpyCost) * item.quantity
-              const linePrice = Number(item.product.jpyPrice) * item.quantity
-              const lineProfit = linePrice - lineCost
+              const linePrice = Number(item.product.thbPrice) * item.quantity
 
               return (
                 <div
@@ -335,8 +333,8 @@ export function OrderForm() {
           <h2 className="mb-4 text-sm font-semibold text-gray-700">Order Summary</h2>
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Subtotal (JPY)</span>
-              <span className="font-medium text-gray-900">{formatJpy(totals.jpyPrice)}</span>
+              <span className="text-gray-500">Subtotal (THB)</span>
+              <span className="font-medium text-gray-900">{formatThb(totals.thbPrice)}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Total Cost (JPY)</span>

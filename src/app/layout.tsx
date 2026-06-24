@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "ZenPreOrder — Japan Pre-Order Dashboard",
+  title: "3A Dashboard — Japan Pre-Order Dashboard",
   description: "Track sales, pricing, and profits for your Japan pre-order business",
 }
 

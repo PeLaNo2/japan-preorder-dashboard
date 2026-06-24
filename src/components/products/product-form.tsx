@@ -1,17 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { Save, ArrowLeft } from "lucide-react"
+import { Save, ArrowLeft, Check } from "lucide-react"
 import Link from "next/link"
 
 interface ProductFormData {
   name: string
   sku: string
   jpyCost: number
-  jpyPrice: number
+  thbPrice: number
+  brand: string
   category: string
+  otherShopPrice: number
   description: string
   stock: number
   imageUrl: string
@@ -32,16 +34,50 @@ export function ProductForm({ initialData }: Props) {
       name: "",
       sku: "",
       jpyCost: 0,
-      jpyPrice: 0,
+      thbPrice: 0,
+      brand: "",
       category: "",
+      otherShopPrice: 0,
       description: "",
       stock: 0,
       imageUrl: "",
     }
   )
 
-  const margin =
-    form.jpyPrice > 0 ? ((form.jpyPrice - form.jpyCost) / form.jpyPrice) * 100 : 0
+  // Brand autocomplete state
+  const [existingBrands, setExistingBrands] = useState<string[]>([])
+  const [showBrandSuggestions, setShowBrandSuggestions] = useState(false)
+  const brandRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    fetch("/api/products/brands")
+      .then((res) => res.json())
+      .then(setExistingBrands)
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (brandRef.current && !brandRef.current.contains(e.target as Node)) {
+        setShowBrandSuggestions(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  const brandFilter = form.brand
+    ? existingBrands.filter(
+        (b) =>
+          b.toLowerCase().includes(form.brand.toLowerCase()) &&
+          b.toLowerCase() !== form.brand.toLowerCase()
+      )
+    : existingBrands
+
+  const priceVsShopPrice =
+    form.otherShopPrice > 0 && form.thbPrice > 0
+      ? ((form.thbPrice - form.otherShopPrice) / form.otherShopPrice) * 100
+      : null
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -107,6 +143,38 @@ export function ProductForm({ initialData }: Props) {
             />
           </div>
 
+          <div className="relative" ref={brandRef}>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">Brand</label>
+            <input
+              value={form.brand}
+              onChange={(e) => {
+                setForm({ ...form, brand: e.target.value })
+                setShowBrandSuggestions(true)
+              }}
+              onFocus={() => setShowBrandSuggestions(true)}
+              placeholder="e.g., Hadalabo"
+              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            />
+            {showBrandSuggestions && brandFilter.length > 0 && (
+              <div className="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-xl border border-gray-200 bg-white shadow-lg">
+                {brandFilter.map((brand) => (
+                  <button
+                    key={brand}
+                    type="button"
+                    onClick={() => {
+                      setForm({ ...form, brand })
+                      setShowBrandSuggestions(false)
+                    }}
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-gray-700 transition-colors hover:bg-indigo-50"
+                  >
+                    <Check className="h-3.5 w-3.5 text-indigo-500" />
+                    {brand}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div>
             <label className="mb-1.5 block text-sm font-medium text-gray-700">SKU *</label>
             <input
@@ -151,17 +219,22 @@ export function ProductForm({ initialData }: Props) {
 
           <div>
             <label className="mb-1.5 block text-sm font-medium text-gray-700">
-              Price (JPY) *
+              Price (THB) *
             </label>
-            <input
-              required
-              type="number"
-              min="1"
-              value={form.jpyPrice || ""}
-              onChange={(e) => setForm({ ...form, jpyPrice: Number(e.target.value) })}
-              placeholder="1580"
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-            />
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+                ฿
+              </span>
+              <input
+                required
+                type="number"
+                min="1"
+                value={form.thbPrice || ""}
+                onChange={(e) => setForm({ ...form, thbPrice: Number(e.target.value) })}
+                placeholder="299"
+                className="w-full rounded-xl border border-gray-200 pl-8 pr-4 py-2.5 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              />
+            </div>
           </div>
 
           <div>
@@ -173,6 +246,25 @@ export function ProductForm({ initialData }: Props) {
               onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })}
               className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
             />
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              Other Shop Price (THB)
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+                ฿
+              </span>
+              <input
+                type="number"
+                min="0"
+                value={form.otherShopPrice || ""}
+                onChange={(e) => setForm({ ...form, otherShopPrice: Number(e.target.value) })}
+                placeholder="349"
+                className="w-full rounded-xl border border-gray-200 pl-8 pr-4 py-2.5 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              />
+            </div>
           </div>
 
           <div className="sm:col-span-2">
@@ -197,25 +289,32 @@ export function ProductForm({ initialData }: Props) {
           </div>
         </div>
 
-        {form.jpyCost > 0 && form.jpyPrice > 0 && (
+        {form.thbPrice > 0 && form.otherShopPrice > 0 && (
           <div className="mt-6 rounded-xl bg-gray-50 p-4">
             <div className="grid grid-cols-3 gap-4 text-center text-sm">
               <div>
-                <p className="text-gray-500">Margin</p>
-                <p className={`text-lg font-bold ${margin >= 20 ? "text-green-600" : "text-amber-600"}`}>
-                  {margin.toFixed(1)}%
+                <p className="text-gray-500">Our Price</p>
+                <p className="text-lg font-bold text-gray-900">
+                  ฿{form.thbPrice.toLocaleString()}
                 </p>
               </div>
               <div>
-                <p className="text-gray-500">Profit (JPY)</p>
+                <p className="text-gray-500">Other Shop</p>
                 <p className="text-lg font-bold text-gray-900">
-                  ¥{(form.jpyPrice - form.jpyCost).toLocaleString()}
+                  ฿{form.otherShopPrice.toLocaleString()}
                 </p>
               </div>
               <div>
-                <p className="text-gray-500">Cost Ratio</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {((form.jpyCost / form.jpyPrice) * 100).toFixed(0)}%
+                <p className="text-gray-500">
+                  {priceVsShopPrice! >= 0 ? "Above Competitor" : "Below Competitor"}
+                </p>
+                <p
+                  className={`text-lg font-bold ${
+                    priceVsShopPrice! <= 0 ? "text-green-600" : "text-amber-600"
+                  }`}
+                >
+                  {priceVsShopPrice! >= 0 ? "+" : ""}
+                  {priceVsShopPrice!.toFixed(1)}%
                 </p>
               </div>
             </div>

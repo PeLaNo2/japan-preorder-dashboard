@@ -33,11 +33,11 @@ export async function GET() {
       where: { salesCount: { gt: 0 } },
       orderBy: { salesCount: "desc" },
       take: 10,
-      select: { name: true, sku: true, salesCount: true, jpyPrice: true, jpyCost: true },
+      select: { name: true, sku: true, salesCount: true, thbPrice: true, jpyCost: true },
     })
 
     const topProductsWithProfit = topProducts.map((p) => {
-      const profitPerUnit = Number(p.jpyPrice) - Number(p.jpyCost)
+      const profitPerUnit = Number(p.thbPrice) - Number(p.jpyCost)
       return {
         name: p.name,
         sku: p.sku,

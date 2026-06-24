@@ -38,10 +38,12 @@ model Product {
   id          String   @id @default(uuid())
   name        String
   description String?
+  brand       String?
   category    String?
   sku         String   @unique
   jpyCost     Decimal  @db.Decimal(10, 2)
-  jpyPrice    Decimal  @db.Decimal(10, 2)
+  thbPrice    Decimal  @db.Decimal(10, 2)
+  otherShopPrice Decimal? @db.Decimal(10, 2)
   stock       Int      @default(0)
   imageUrl    String?
   isActive    Boolean  @default(true)

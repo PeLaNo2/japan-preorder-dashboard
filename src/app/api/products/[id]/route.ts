@@ -23,12 +23,6 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const product = await prisma.product.findUnique({ where: { id } })
   if (!product) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
-  const jpyCost = body.jpyCost ?? product.jpyCost
-  const jpyPrice = body.jpyPrice ?? product.jpyPrice
-  if (Number(jpyCost) >= Number(jpyPrice)) {
-    return NextResponse.json({ error: "Cost must be less than price" }, { status: 400 })
-  }
-
   if (body.sku && body.sku !== product.sku) {
     const existing = await prisma.product.findUnique({ where: { sku: body.sku } })
     if (existing) return NextResponse.json({ error: "SKU already exists" }, { status: 409 })
@@ -40,8 +34,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       name: body.name ?? undefined,
       sku: body.sku ?? undefined,
       jpyCost: body.jpyCost ?? undefined,
-      jpyPrice: body.jpyPrice ?? undefined,
+      thbPrice: body.thbPrice ?? undefined,
+      brand: body.brand ?? undefined,
       category: body.category ?? undefined,
+      otherShopPrice: body.otherShopPrice ?? undefined,
       description: body.description ?? undefined,
       stock: body.stock ?? undefined,
       imageUrl: body.imageUrl ?? undefined,

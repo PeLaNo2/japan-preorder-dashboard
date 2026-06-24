@@ -34,14 +34,10 @@ export async function POST(request: Request) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const body = await request.json()
-  const { name, sku, jpyCost, jpyPrice, category, description, stock, imageUrl } = body
+  const { name, sku, jpyCost, thbPrice, brand, category, otherShopPrice, description, stock, imageUrl } = body
 
-  if (!name || !sku || jpyCost == null || jpyPrice == null) {
+  if (!name || !sku || jpyCost == null || thbPrice == null) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
-  }
-
-  if (Number(jpyCost) >= Number(jpyPrice)) {
-    return NextResponse.json({ error: "Cost must be less than price" }, { status: 400 })
   }
 
   const existing = await prisma.product.findUnique({ where: { sku } })
@@ -54,8 +50,10 @@ export async function POST(request: Request) {
       name,
       sku,
       jpyCost,
-      jpyPrice,
+      thbPrice,
+      brand: brand ?? null,
       category: category ?? null,
+      otherShopPrice: otherShopPrice ?? null,
       description: description ?? null,
       stock: stock ?? 0,
       imageUrl: imageUrl ?? null,

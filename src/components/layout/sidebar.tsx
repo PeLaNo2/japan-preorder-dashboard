@@ -30,7 +30,7 @@ export function Sidebar() {
           <ShoppingBag className="h-5 w-5" />
         </div>
         <div>
-          <h1 className="text-base font-bold text-gray-900">ZenPreOrder</h1>
+          <h1 className="text-base font-bold text-gray-900">3A Dashboard</h1>
           <p className="text-xs text-gray-400">Business Dashboard</p>
         </div>
       </div>

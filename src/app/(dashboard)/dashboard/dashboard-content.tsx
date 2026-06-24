@@ -47,7 +47,7 @@ export async function DashboardContent() {
         where: { salesCount: { gt: 0 } },
         orderBy: { salesCount: "desc" },
         take: 5,
-        select: { name: true, sku: true, salesCount: true, jpyPrice: true, jpyCost: true },
+        select: { name: true, sku: true, salesCount: true, thbPrice: true, jpyCost: true },
       }),
     []
   )
@@ -56,7 +56,7 @@ export async function DashboardContent() {
     name: p.name,
     sku: p.sku,
     salesCount: p.salesCount,
-    profitJpy: (Number(p.jpyPrice) - Number(p.jpyCost)) * p.salesCount,
+    profitJpy: (Number(p.thbPrice) - Number(p.jpyCost)) * p.salesCount,
   }))
 
   const thirtyDaysAgo = new Date()

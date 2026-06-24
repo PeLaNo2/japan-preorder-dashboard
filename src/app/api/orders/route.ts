@@ -108,15 +108,15 @@ export async function POST(request: Request) {
 
       const qty = item.quantity
       const unitJpyCost = Number(product.jpyCost)
-      const unitJpyPrice = Number(product.jpyPrice)
+      const unitThbPrice = Number(product.thbPrice)
+      const unitJpyPrice = unitThbPrice / Number(rate.jpyToThb)
       const itemTotalJpyCost = unitJpyCost * qty
       const itemTotalJpyPrice = unitJpyPrice * qty
       const itemProfitJpy = itemTotalJpyPrice - itemTotalJpyCost
 
       const unitThbCost = unitJpyCost * rate.jpyToThb
-      const unitThbPrice = unitJpyPrice * rate.jpyToThb
       const itemTotalThbCost = itemTotalJpyCost * rate.jpyToThb
-      const itemTotalThbPrice = itemTotalJpyPrice * rate.jpyToThb
+      const itemTotalThbPrice = unitThbPrice * qty
       const itemProfitThb = itemTotalThbPrice - itemTotalThbCost
 
       totalJpyCost += itemTotalJpyCost

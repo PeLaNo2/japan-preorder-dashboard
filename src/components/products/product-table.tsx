@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Pencil, Plus } from "lucide-react"
 import { type Product } from "@prisma/client"
-import { JpyDisplay, ThbDisplay } from "@/components/shared/currency-display"
+import { ThbDisplay } from "@/components/shared/currency-display"
 import { EmptyState } from "@/components/shared/empty-state"
 
 interface Props {
@@ -46,16 +46,16 @@ export function ProductTable({ products, search }: Props) {
                 Product
               </th>
               <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                Brand
+              </th>
+              <th className="px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
                 SKU
               </th>
               <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
                 Cost (JPY)
               </th>
               <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Price (JPY)
-              </th>
-              <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
-                Margin
+                Price (THB)
               </th>
               <th className="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
                 Sold
@@ -69,8 +69,7 @@ export function ProductTable({ products, search }: Props) {
           <tbody className="divide-y divide-gray-100">
             {products.map((product) => {
               const cost = Number(product.jpyCost)
-              const price = Number(product.jpyPrice)
-              const margin = ((price - cost) / price) * 100
+              const price = Number(product.thbPrice)
               return (
                 <tr key={product.id} className="transition-colors hover:bg-gray-50/50">
                   <td className="px-5 py-4">
@@ -88,27 +87,28 @@ export function ProductTable({ products, search }: Props) {
                       )}
                       <div>
                         <p className="text-sm font-medium text-gray-900">{product.name}</p>
-                        {product.category && (
-                          <span className="text-xs text-gray-400">{product.category}</span>
-                        )}
+                        <div className="flex items-center gap-2">
+                          {product.brand && (
+                            <span className="text-xs text-gray-500">{product.brand}</span>
+                          )}
+                          {product.category && (
+                            <span className="text-xs text-gray-400">
+                              {product.brand ? "·" : ""} {product.category}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </td>
+                  <td className="px-5 py-4 text-sm text-gray-500">
+                    {product.brand || "-"}
+                  </td>
                   <td className="px-5 py-4 text-sm text-gray-500">{product.sku}</td>
                   <td className="px-5 py-4 text-right text-sm">
-                    <JpyDisplay amount={cost} />
+                    ¥{cost.toLocaleString()}
                   </td>
                   <td className="px-5 py-4 text-right text-sm font-medium">
-                    <JpyDisplay amount={price} />
-                  </td>
-                  <td className="px-5 py-4 text-right text-sm">
-                    <span
-                      className={`font-medium ${
-                        margin >= 30 ? "text-green-600" : margin >= 15 ? "text-amber-600" : "text-red-500"
-                      }`}
-                    >
-                      {margin.toFixed(1)}%
-                    </span>
+                    <ThbDisplay amount={price} />
                   </td>
                   <td className="px-5 py-4 text-right text-sm text-gray-500">
                     {product.salesCount}
@@ -142,8 +142,7 @@ export function ProductTable({ products, search }: Props) {
       <div className="grid gap-3 md:hidden">
         {products.map((product) => {
           const cost = Number(product.jpyCost)
-          const price = Number(product.jpyPrice)
-          const margin = ((price - cost) / price) * 100
+          const price = Number(product.thbPrice)
           return (
             <Link
               key={product.id}
@@ -157,21 +156,17 @@ export function ProductTable({ products, search }: Props) {
                 <div className="flex-1 min-w-0">
                   <p className="truncate text-sm font-medium text-gray-900">{product.name}</p>
                   <p className="text-xs text-gray-400">{product.sku}</p>
+                  {product.brand && (
+                    <p className="text-xs text-gray-400">{product.brand}</p>
+                  )}
                 </div>
-                <span
-                  className={`shrink-0 text-xs font-semibold ${
-                    margin >= 30 ? "text-green-600" : margin >= 15 ? "text-amber-600" : "text-red-500"
-                  }`}
-                >
-                  {margin.toFixed(1)}%
-                </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">
-                  Cost: <JpyDisplay amount={cost} />
+                  Cost: ¥{cost.toLocaleString()}
                 </span>
                 <span className="font-medium">
-                  Price: <JpyDisplay amount={price} />
+                  Price: <ThbDisplay amount={price} />
                 </span>
               </div>
               <div className="mt-1.5 flex justify-between text-xs text-gray-400">
