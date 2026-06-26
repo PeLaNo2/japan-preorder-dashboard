@@ -15,32 +15,32 @@ export default async function SignInPage() {
   if (session) redirect("/dashboard")
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
       <div className="w-full max-w-sm text-center">
         <div className="mb-8 flex items-center justify-center gap-3">
-          <div className="rounded-xl bg-indigo-600 p-3 text-white shadow-lg shadow-indigo-200">
+          <div className="rounded-xl bg-indigo-600 p-3 text-white shadow-lg shadow-indigo-200 dark:shadow-indigo-900/30">
             <ShoppingBag className="h-8 w-8" />
           </div>
           <div className="text-left">
-            <h1 className="text-2xl font-bold text-gray-900">ZenPreOrder</h1>
-            <p className="text-sm text-gray-500">Japan Pre-Order Dashboard</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">3A Dashboard</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Japan Pre-Order Dashboard</p>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm dark:border-gray-700 dark:bg-gray-900">
           {configError ? (
-            <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
+            <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-left dark:border-amber-800 dark:bg-amber-900/30">
               <div className="flex items-start gap-3">
-                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
                 <div>
-                  <p className="text-sm font-medium text-amber-800">
+                  <p className="text-sm font-medium text-amber-800 dark:text-amber-300">
                     Google OAuth not configured
                   </p>
-                  <p className="mt-1 text-xs text-amber-700">
-                    Add <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono">AUTH_GOOGLE_ID</code>,{" "}
-                    <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono">AUTH_GOOGLE_SECRET</code>,{" "}
-                    <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono">AUTH_SECRET</code>, and{" "}
-                    <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono">ALLOWED_EMAILS</code>{" "}
+                  <p className="mt-1 text-xs text-amber-700 dark:text-amber-400">
+                    Add <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono dark:bg-amber-800">AUTH_GOOGLE_ID</code>,{" "}
+                    <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono dark:bg-amber-800">AUTH_GOOGLE_SECRET</code>,{" "}
+                    <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono dark:bg-amber-800">AUTH_SECRET</code>, and{" "}
+                    <code className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-mono dark:bg-amber-800">ALLOWED_EMAILS</code>{" "}
                     in your Vercel dashboard environment variables.
                   </p>
                 </div>
@@ -48,8 +48,8 @@ export default async function SignInPage() {
             </div>
           ) : null}
 
-          <h2 className="mb-2 text-xl font-semibold text-gray-900">Welcome back</h2>
-          <p className="mb-8 text-sm text-gray-500">
+          <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">Welcome back</h2>
+          <p className="mb-8 text-sm text-gray-500 dark:text-gray-400">
             Sign in with your Google account to continue
           </p>
           <form
@@ -60,7 +60,7 @@ export default async function SignInPage() {
           >
             <button
               type="submit"
-              className="inline-flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-50 hover:shadow-md active:scale-[0.98]"
+              className="inline-flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-50 hover:shadow-md active:scale-[0.98] dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
                 <path
@@ -86,7 +86,7 @@ export default async function SignInPage() {
         </div>
 
         {!configError && (
-          <p className="mt-6 text-xs text-gray-400">
+          <p className="mt-6 text-xs text-gray-400 dark:text-gray-500">
             Only whitelisted emails can access this dashboard
           </p>
         )}

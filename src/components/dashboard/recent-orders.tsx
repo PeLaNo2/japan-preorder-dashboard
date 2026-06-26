@@ -13,11 +13,11 @@ interface OrderEntry {
 }
 
 const statusColors: Record<string, string> = {
-  PENDING: "bg-amber-100 text-amber-700",
-  CONFIRMED: "bg-blue-100 text-blue-700",
-  SHIPPED: "bg-purple-100 text-purple-700",
-  DELIVERED: "bg-green-100 text-green-700",
-  CANCELLED: "bg-red-100 text-red-700",
+  PENDING: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
+  CONFIRMED: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+  SHIPPED: "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
+  DELIVERED: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
+  CANCELLED: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
 }
 
 interface Props {

@@ -20,6 +20,7 @@
     "lucide-react": "^1.21.0",
     "next": "16.2.9",
     "next-auth": "5.0.0-beta.31",
+    "next-themes": "^0.4.6",
     "prisma": "^7.8.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -29,7 +30,12 @@
     "ws": "^8.21.0"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@prisma/engines", "prisma", "sharp", "unrs-resolver"]
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "prisma",
+      "sharp",
+      "unrs-resolver"
+    ]
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

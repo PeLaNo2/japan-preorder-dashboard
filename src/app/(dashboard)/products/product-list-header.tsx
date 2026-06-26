@@ -19,8 +19,8 @@ export function ProductListHeader() {
   return (
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-        <p className="text-sm text-gray-500">Manage your product catalog</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Products</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Manage your product catalog</p>
       </div>
       <div className="flex items-center gap-3">
         <div className="relative">
@@ -30,7 +30,7 @@ export function ProductListHeader() {
             placeholder="Search products..."
             defaultValue={searchParams.get("search") ?? ""}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-56 rounded-xl border border-gray-200 py-2.5 pl-10 pr-4 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            className="w-56 rounded-xl border border-gray-200 py-2.5 pl-10 pr-4 text-sm transition-colors focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:ring-indigo-900"
           />
         </div>
         <Link

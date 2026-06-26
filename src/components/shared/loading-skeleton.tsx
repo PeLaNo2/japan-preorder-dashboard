@@ -3,13 +3,13 @@ export function TableSkeleton({ rows = 5, cols = 5 }: { rows?: number; cols?: nu
     <div className="animate-pulse">
       <div className="mb-4 flex gap-4">
         {Array.from({ length: cols }).map((_, i) => (
-          <div key={i} className="h-4 flex-1 rounded bg-gray-100" />
+          <div key={i} className="h-4 flex-1 rounded bg-gray-100 dark:bg-gray-800" />
         ))}
       </div>
       {Array.from({ length: rows }).map((_, i) => (
         <div key={i} className="mb-3 flex gap-4">
           {Array.from({ length: cols }).map((_, j) => (
-            <div key={j} className="h-4 flex-1 rounded bg-gray-50" />
+            <div key={j} className="h-4 flex-1 rounded bg-gray-50 dark:bg-gray-800/50" />
           ))}
         </div>
       ))}
